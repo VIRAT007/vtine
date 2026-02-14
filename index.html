@@ -173,6 +173,25 @@
       // 🔹 NO Click
       noBtn.addEventListener("click", () => {
         lastInteraction = Date.now();
+
+        const padding = 10;
+
+        const containerRect = container.getBoundingClientRect();
+
+        const maxX = container.clientWidth - noBtn.offsetWidth - padding;
+        const maxY = container.clientHeight - noBtn.offsetHeight - padding;
+
+        const minX = padding;
+        const minY = padding;
+
+        const randomX = Math.random() * (maxX - minX) + minX;
+        const randomY = Math.random() * (maxY - minY) + minY;
+
+        noBtn.style.left = randomX + "px";
+        noBtn.style.top = randomY + "px";
+
+        yesScale += 0.15;
+        yesBtn.style.transform = `scale(${yesScale})`;
         spawnImo(sadImos);
       });
 
