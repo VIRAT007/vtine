@@ -99,6 +99,8 @@
 
       let yesScale = 1;
       let lastInteraction = Date.now();
+      let askInterval;
+      let happyInterval;
 
       // 🔹 Your webp files
       const askImos = ["imo/ask1.webp", "imo/ask2.webp", "imo/ask3.webp"];
@@ -120,7 +122,6 @@
         "imo/happy6.webp",
         "imo/happy7.webp",
         "imo/happy8.webp",
-        ,
         "imo/happy9.webp",
       ];
 
@@ -144,31 +145,30 @@
       }
 
       // 🔹 Move NO button
-const container = document.querySelector(".container");
+      const container = document.querySelector(".container");
 
-noBtn.addEventListener("mouseover", () => {
+      noBtn.addEventListener("mouseover", () => {
+        const padding = 10;
 
-    const padding = 10;
+        const containerRect = container.getBoundingClientRect();
 
-    const containerRect = container.getBoundingClientRect();
+        const maxX = container.clientWidth - noBtn.offsetWidth - padding;
+        const maxY = container.clientHeight - noBtn.offsetHeight - padding;
 
-    const maxX = container.clientWidth - noBtn.offsetWidth - padding;
-    const maxY = container.clientHeight - noBtn.offsetHeight - padding;
+        const minX = padding;
+        const minY = padding;
 
-    const minX = padding;
-    const minY = padding;
+        const randomX = Math.random() * (maxX - minX) + minX;
+        const randomY = Math.random() * (maxY - minY) + minY;
 
-    const randomX = Math.random() * (maxX - minX) + minX;
-    const randomY = Math.random() * (maxY - minY) + minY;
+        noBtn.style.left = randomX + "px";
+        noBtn.style.top = randomY + "px";
 
-    noBtn.style.left = randomX + "px";
-    noBtn.style.top = randomY + "px";
+        yesScale += 0.15;
+        yesBtn.style.transform = `scale(${yesScale})`;
 
-    yesScale += 0.15;
-    yesBtn.style.transform = `scale(${yesScale})`;
-
-    spawnImo(sadImos);
-});
+        spawnImo(sadImos);
+      });
 
       // 🔹 NO Click
       noBtn.addEventListener("click", () => {
@@ -179,7 +179,19 @@ noBtn.addEventListener("mouseover", () => {
       // 🔹 YES Click
       yesBtn.addEventListener("click", () => {
         lastInteraction = Date.now();
-        spawnImo(happyImos);
+
+        // 🛑 Stop ASK interval
+        clearInterval(askInterval);
+
+        // 🧹 Remove all existing floating emojis (sad + ask)
+        document.querySelectorAll(".floating-imo").forEach((el) => el.remove());
+
+        // 🎨 Change background
+        document.body.style.background =
+          "linear-gradient(135deg,#ff4d6d,#ff8fab)";
+
+        // ❌ Hide container
+        document.querySelector(".container").style.display = "none";
 
         setTimeout(() => {
           document.body.innerHTML = `
@@ -191,10 +203,17 @@ noBtn.addEventListener("mouseover", () => {
             </div>
         `;
         }, 1500);
+        // ⏳ Wait 2 seconds
+        setTimeout(() => {
+          // 💕 Start happy spawning every 500ms
+          happyInterval = setInterval(() => {
+            spawnImo(happyImos);
+          }, 500);
+        }, 2000);
       });
 
       // 🔹 Every 2 sec if no interaction → show ASK
-      setInterval(() => {
+      askInterval = setInterval(() => {
         if (Date.now() - lastInteraction > 2000) {
           spawnImo(askImos);
         }
