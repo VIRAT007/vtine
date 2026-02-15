@@ -148,51 +148,36 @@
       // 🔹 Move NO button
       const container = document.querySelector(".container");
 
-      noBtn.addEventListener("mouseover", () => {
-        const padding = 10;
-
-        const containerRect = container.getBoundingClientRect();
-
-        const maxX = container.clientWidth - noBtn.offsetWidth - padding;
-        const maxY = container.clientHeight - noBtn.offsetHeight - padding;
-
-        const minX = padding;
-        const minY = padding;
-
-        const randomX = Math.random() * (maxX - minX) + minX;
-        const randomY = Math.random() * (maxY - minY) + minY;
-
-        noBtn.style.left = randomX + "px";
-        noBtn.style.top = randomY + "px";
-
-        yesScale += 0.15;
-        yesBtn.style.transform = `scale(${yesScale})`;
-
-        spawnImo(sadImos);
-      });
-
+      
       // 🔹 NO Click
       noBtn.addEventListener("click", () => {
         lastInteraction = Date.now();
 
-        const padding = 10;
+        const paddingX = noBtn.clientWidth;
+        const paddingY = noBtn.clientHeight;
 
         const containerRect = container.getBoundingClientRect();
 
-        const maxX = container.clientWidth - noBtn.offsetWidth - padding;
-        const maxY = container.clientHeight - noBtn.offsetHeight - padding;
+        const maxX = 100;
+        const maxY = 300;
 
-        const minX = padding;
-        const minY = padding;
+        const minX = -maxX;
+        const minY = -maxY;
 
         const randomX = Math.random() * (maxX - minX) + minX;
         const randomY = Math.random() * (maxY - minY) + minY;
 
-        noBtn.style.left = randomX + "px";
-        noBtn.style.top = randomY + "px";
+        noBtn.style.left = randomX + "%";
+        noBtn.style.top = randomY + "%";
 
         yesScale += 0.15;
         yesBtn.style.transform = `scale(${yesScale})`;
+                console.log("click", window.visualViewport.height, window.visualViewport.width)
+                console.log({cw:container.clientWidth, ch: container.clientHeight})
+        console.log({ X:`${minX}-${maxX}`, Y:`${minY}-${maxY}` });
+        console.log({ randomX, randomY });
+        console.log({noBtn: `${noBtn.style.left}-${noBtn.style.top}`})
+
         spawnImo(sadImos);
       });
 
